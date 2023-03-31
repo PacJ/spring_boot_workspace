@@ -1,0 +1,11 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+
+import com.example.demo.service.TodoService;
+
+@Controller
+public class TodoController {
+
+	private TodoService todoService;
+}

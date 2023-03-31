@@ -1,0 +1,22 @@
+package com.example.demo;
+
+public class MemDTO {
+	private String name;
+	private int age;
+	private String loc;
+	
+	public MemDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public MemDTO(String name, int age, String loc) {
+		super();
+		this.name = name;
+		this.age = age;
+		this.loc = loc;
+	}
+	
+	
+	
+
+}

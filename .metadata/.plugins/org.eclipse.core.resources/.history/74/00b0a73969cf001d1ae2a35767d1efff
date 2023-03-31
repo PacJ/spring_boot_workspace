@@ -1,0 +1,24 @@
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import com.example.demo.dto.TodoDTO;
+import com.example.demo.service.TodoService;
+
+@Controller
+public class TodoController {
+
+	@Autowired
+	private TodoService todoService;
+
+	public TodoController() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public List<TodoDTO> getList() throws Exception{
+		
+	}
+}
