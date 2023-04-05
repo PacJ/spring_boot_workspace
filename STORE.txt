@@ -1,0 +1,140 @@
+*/
+BOARD_LIST
+
+import { useDispatch, useSelector } from 'react-redux';
+import { boardActions } from '../../reduxs/actions/board_action';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const BoardList = () => {
+    const dispatch = useDispatch();
+    const navigator = useNavigate();
+
+    const boardList = useSelector((state) => state.board.boardList);
+    const getBoardList = (currentPage) => {
+        dispatch(boardActions.getBoardList(currentPage));
+        navigator(`/board/list/${currentPage}`);
+    };
+
+    useEffect(() => {
+        getBoardList(1);
+    }, []);
+
+    return (
+        <div>
+            <h3 className = 'text-center'>게시판 목록</h3>
+            <table className = 'table table-striped' style = {{marginTop:20}}>
+                <colgroup>
+                    <col width='8%' />
+                    <col width='*' />
+                    <col width='12%' />
+                    <col width='12%' />
+                </colgroup>
+
+                <thead>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>조회수</th>
+                </thead>
+
+                <tbody>
+                    {boardList && boardList.map((board) => {
+                        return (
+                            <tr key = {board.num}>
+                                <th>{board.num}</th>
+                                <th>{board.subject}</th>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table> 
+            <p>{console.log(boardList)}</p> 
+        </div>
+    );
+};
+
+export default BoardList;
+*/
+
+*/
+BOARD_REDUCER
+
+//reducer를 이용하여 store에 data를 저장
+
+import {createSlice} from '@reduxjs/toolkit';
+
+let initialState = {
+    boardList:[],
+    pv:{currentPage:1},
+    boardDetail:{},
+    boardFile:null,
+};
+
+const boardSlice = createSlice({
+    name:'board', 
+    initialState,
+
+    reducers: {
+        getBoardList(state, action) {
+            state.boardList = action.payload.data.aList;
+            state.pv = action.payload.data.pv;
+        },
+    },
+});
+
+// 이것을 이용하여 함수명 자동완성을 할 수 있다.
+export const boardReducers = boardSlice.actions;
+export default boardSlice.reducer;
+*/
+
+
+*/
+BOARD_ACTION
+
+import axios from 'axios';
+import { baseUrl } from '../../apiurl';
+import { boardReducers } from '../reducers/board_reducer';
+
+function getBoardList(currentPage) {
+    return async (dispatch) => {
+        const data = await axios
+            .get(`${baseUrl}/board/list/${currentPage}`)
+            .then((response) => response.data);
+        console.log(data);
+        dispatch(boardReducers.getBoardList({data}));
+    };
+}
+
+export const boardActions = {getBoardList};
+*/
+
+
+/*
+APP
+
+import {Route, Routes} from 'react-router-dom';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import BaseLayout from './components/layout/BaseLayout';
+import Home from './components/home';
+import BoardList from './components/board/board_list';
+
+function App() {
+  return (
+    <div className="container">
+      <h1>My shop</h1>
+      <Routes>
+        <Route path = '/' element = {<BaseLayout/>}>
+          <Route index element = {<Home/>}/>
+
+          < Route path = '/board/list/:currentPage' element = {<BoardList/>} />
+
+        </Route>
+      </Routes>
+    </div>
+  );
+}
+
+export default App;
+*/
