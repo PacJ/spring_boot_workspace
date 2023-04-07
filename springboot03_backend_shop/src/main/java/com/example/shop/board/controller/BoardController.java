@@ -7,7 +7,9 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -60,11 +62,16 @@ public class BoardController {
 	public Map<String, Object> listExecute(@PathVariable("currentPage") int currentPage, PageDTO pv) {
 		Map<String, Object> map = new HashMap<>();
 		int totalRecord = boardService.countProcess();
+
+//			System.out.println(boardService.listProcess(this.pdto).get(1).getMembersDTO().getMemberName());
+//		List<BoardDTO> bList = new ArrayList<>();
+//		bList = boardService.listProcess(this.pdto);
+//		System.out.println(bList.get(1));
 		if(totalRecord>=1) {
 			this.currentPage = currentPage;
 			
 			this.pdto = new PageDTO(this.currentPage, totalRecord);
-			
+			System.out.println(boardService.listProcess(this.pdto));
 			map.put("aList", boardService.listProcess(this.pdto));
 			map.put("pv", this.pdto);
 		}
@@ -80,23 +87,13 @@ public class BoardController {
 	public String writeProExecute(BoardDTO dto, PageDTO pv, HttpServletRequest req, HttpSession session) {
 		MultipartFile file = dto.getFilename();
 		
-		//System.out.println(dto.getMembersDTO().getMemberName());
-		
-		
-		
 		//파일 첨부가 있으면...
 		if(file!=null && !file.isEmpty()) {
-			
-			
-			
 			UUID random = FileUpload.saveCopyFile(file, filePath);
 			dto.setUpload(random + "_" + file.getOriginalFilename());
 		}
 		
 		dto.setIp(req.getRemoteAddr());
-		
-//		AuthInfo authInfo = (AuthInfo)session.getAttribute("authInfo");
-//		dto.setMemberEmail(authInfo.getMemberEmail());
 		
 		boardService.insertProcess(dto);
 		
