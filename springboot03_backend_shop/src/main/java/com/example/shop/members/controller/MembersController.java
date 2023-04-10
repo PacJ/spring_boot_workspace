@@ -3,10 +3,13 @@ package com.example.shop.members.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,23 +56,25 @@ public class MembersController {
 		return "redirect:/home.do";
 	}
 	
-	//정보 수정
-	@PutMapping("/member/update")
-	public void updateMember(MembersDTO dto, HttpServletRequest request) throws IllegalStateException, IOException {
-		
-		 //  dto. get 해서 메일 이름 전화번호 비밀번호 프린트찍어서 확인
-		// 비밀번호를 변경해야 그 인코딩하는 특수문자섞는걸로
-		//set 으로 비밀번호 인코딩한걸로 바꿔주고
-		//그대로 대입하면끝
-		
-		
-		System.out.println(dto.getMemberEmail());
-		System.out.println(dto.getMemberName());
-		System.out.println(dto.getMemberPass());
-		System.out.println(dto.getMemberPhone());
-//		membersService.updateMembersProcess(dto.getMemberEmail());
-		
+	//회원정보 가져오기
+	@GetMapping("member/editInfo/{memberEmail}")
+	public MembersDTO getMember(@PathVariable("memberEmail") String memberEmail) {
+		return membersService.updateMembersProcess(memberEmail);
 	}
+	
+	//정보 수정
+	@PostMapping("/member/update")
+	public void updateMember(@RequestBody MembersDTO membersDTO) {
+		membersDTO.setMemberPass(encodePassword.encode(membersDTO.getMemberPass()));
+		membersService.updateMemberProcess(membersDTO);
+	}
+	//  dto. get 해서 메일 이름 전화번호 비밀번호 프린트찍어서 확인
+	// 비밀번호를 변경해야 그 인코딩하는 특수문자섞는걸로
+	//set 으로 비밀번호 인코딩한걸로 바꿔주고
+	//그대로 대입하면끝
+	
+	
+	
 	//로그아웃
 //		@RequestMapping(value="/member/logout.do")
 //		public String logoutMember(HttpSession session) {

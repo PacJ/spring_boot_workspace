@@ -15,4 +15,5 @@ public interface MembersDAO {
 	public void updateMember(MembersDTO dto);
 	public void updateByPass(MembersDTO dto);
 
+	
 }
